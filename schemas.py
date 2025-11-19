@@ -11,7 +11,7 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 
 # Example schemas (replace with your own):
@@ -37,6 +37,20 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# Didgori-specific schema
+class Reservation(BaseModel):
+    """
+    Reservations for tables at Didgori
+    Collection name: "reservation"
+    """
+    name: str = Field(..., min_length=2, description="Guest name")
+    guests: int = Field(..., ge=1, le=24, description="Number of guests")
+    date: str = Field(..., description="Date in YYYY-MM-DD")
+    time: str = Field(..., description="Time in HH:MM")
+    phone: Optional[str] = Field(None, description="Contact phone number")
+    email: Optional[EmailStr] = Field(None, description="Contact email (optional)")
+    notes: Optional[str] = Field(None, max_length=500, description="Special requests")
 
 # Add your own schemas here:
 # --------------------------------------------------
